@@ -1,0 +1,6 @@
+FASTALIST=>/fujfs/d2/MAGnet_RNAseq/bin/samples_fastq.csv
+PROJECTNAME=>/fujfs/d2/MAGnet_RNAseq/PhasedGenotypes
+INDIR=>/fujfs/d2/MAGnet_RNAseq/gsnap
+JOBS=>4
+THREADS=>10
+GTF=>/fujfs/d2/MAGnet_RNAseq/gtf_files/Homo_sapiens.GRCh37.75.protein.lincRNA.novels.gtf
