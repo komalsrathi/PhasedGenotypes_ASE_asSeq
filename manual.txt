@@ -1,0 +1,38 @@
+Each output folder is organized per chromosome, like this:
+chr1_ase ->
+    ase_counts  
+    chr1.1.hapLabel  
+    chr1.hapLabel  
+    extractAsReads_input  
+    extractAsReads_output  
+    snpList_files
+
+############# Step 1 #############
+prepareBAMForAsSeq.pl - manipulate GSNAP output filter_sort.bam for asSeq extractAsReads function
+usage: perl prepareBAMForAsSeq.pl prepareBAMforasSeq.params
+
+For each filter_sort.bam file, we have to remove hard clipping from the bam file by read name and make sure all reads are paired. After running this script, the resulting bam files will be stored in extractAsReads_input folder under each chromosome directory.
+############# Step 1 #############
+
+############# Step 2 #############
+getsnpList.R - this script will extract SNPs with heterozygous genotypes for each sample per chromosome. 
+
+The input for this script is /fujfs/d1/Genotype/Illumina/imputed/Illumina_OEE_FWD_%s.info and /fujfs/d1/Genotype/Illumina/imputed/Illumina_OEE_FWD_%s.hapLabel.gz where %s is chr1, chr2 and so on. The script accesses these files inside the script dynamically, so you don't have to explicitly specify it.
+
+The output files after running getsnpList.R are stored in a folder named snpList_files. You will get a snpList for each sample (n=64) for each chromosome.
+
+%s.1.hapLabel and %s.hapLabel files are intermediate files that are formed while running the getsnpList.R script. 
+############# Step 2 #############
+
+############# Step 3 #############
+extractAsReads.R
+
+Input is the heterogenous SNP files obtained after running getsnpList.R (snpList_files folder) and bam files obtained after running prepareBAMForAsSeq.pl (extractAsReads_input folder). Again, there is no need to specify the input explicitly, the script reads the input dynamically. The output bam files go in extractAsReads_output folder.
+############# Step 3 #############
+
+############# Step 4 #############
+run htseq-count on the bam files obtained after running extractAsReads.R to get allele specific counts.
+usage: perl htseq_count.pl prepareBAMforasSeq.params
+
+The resulting counts go in ase_counts folder. It contains counts per haplotype per sample for e.g. C00060_hap1.counts and C00060_hap2.counts and so on.
+############# Step 4 #############
